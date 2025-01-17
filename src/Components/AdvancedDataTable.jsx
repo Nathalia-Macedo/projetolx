@@ -169,39 +169,41 @@ const AdvancedDataTable = ({ tables, currentTableId, onTableSelect }) => {
 
   return (
     <div className="bg-white shadow rounded-lg overflow-hidden">
-      <div className="px-4 py-5 sm:px-6 flex justify-between items-center bg-gray-50">
+      <div className="px-4 py-5 sm:px-6 flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:justify-between sm:items-center bg-gray-50">
         <h3 className="text-lg leading-6 font-medium text-gray-900">
           {currentTable.title}
         </h3>
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
           <TableList
             tables={tables}
             currentTableId={currentTableId}
             onTableSelect={onTableSelect}
           />
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            {showFilters ? 'Esconder Filtros' : 'Mostrar Filtros'}
-          </button>
-          <button
-            onClick={() => {
-              const csvContent = "data:text/csv;charset=utf-8," 
-                + currentTable.columns.map(col => col.label).join(",") + "\n"
-                + currentTable.data.map(row => currentTable.columns.map(col => row[col.key]).join(",")).join("\n");
-              const encodedUri = encodeURI(csvContent);
-              const link = document.createElement("a");
-              link.setAttribute("href", encodedUri);
-              link.setAttribute("download", `${currentTable.title}.csv`);
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }}
-            className="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Exportar CSV
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex-1 sm:flex-none px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              {showFilters ? 'Esconder Filtros' : 'Mostrar Filtros'}
+            </button>
+            <button
+              onClick={() => {
+                const csvContent = "data:text/csv;charset=utf-8," 
+                  + currentTable.columns.map(col => col.label).join(",") + "\n"
+                  + currentTable.data.map(row => currentTable.columns.map(col => row[col.key]).join(",")).join("\n");
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", `${currentTable.title}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
+              className="flex-1 sm:flex-none px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Exportar CSV
+            </button>
+          </div>
         </div>
       </div>
       <div className="px-4 py-3 border-b border-gray-200">
@@ -217,7 +219,7 @@ const AdvancedDataTable = ({ tables, currentTableId, onTableSelect }) => {
         />
       </div>
       {showFilters && (
-        <div className="px-4 py-3 border-b border-gray-200 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div className="px-4 py-3 border-b border-gray-200 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {currentTable.columns.map(column => (
             <div key={column.key} className="flex flex-col">
               <label htmlFor={column.key} className="block text-sm font-medium text-gray-700 mb-1">
@@ -287,7 +289,7 @@ const AdvancedDataTable = ({ tables, currentTableId, onTableSelect }) => {
               paginatedData.map((row, rowIndex) => (
                 <tr key={rowIndex} className={rowIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                   {currentTable.columns.map((column) => (
-                    <td key={`${rowIndex}-${column.key}`} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td key={`${rowIndex}-${column.key}`} className="px-4 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-sm text-gray-500 truncate max-w-xs">
                       {column.key === 'salario' || column.key === 'preco' 
                         ? `R$ ${row[column.key].toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` 
                         : row[column.key]}
@@ -299,25 +301,9 @@ const AdvancedDataTable = ({ tables, currentTableId, onTableSelect }) => {
           </tbody>
         </table>
       </div>
-      <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-        <div className="flex-1 flex justify-between sm:hidden">
-          <button
-            onClick={() => goToPage(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-          >
-            Anterior
-          </button>
-          <button
-            onClick={() => goToPage(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-          >
-            Próximo
-          </button>
-        </div>
-        <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-          <div>
+      <div className="bg-white px-4 py-3 flex flex-col sm:flex-row items-center justify-between border-t border-gray-200 sm:px-6">
+        <div className="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <div className="mb-4 sm:mb-0">
             <p className="text-sm text-gray-700">
               Mostrando <span className="font-medium">{Math.min((currentPage - 1) * itemsPerPage + 1, filteredAndSortedData.total)}</span> a <span className="font-medium">{Math.min(currentPage * itemsPerPage, filteredAndSortedData.total)}</span> de{' '}
               <span className="font-medium">{filteredAndSortedData.total}</span> resultados
@@ -336,15 +322,20 @@ const AdvancedDataTable = ({ tables, currentTableId, onTableSelect }) => {
               <option value="20">20</option>
             </select>
           </div>
-          <div>
-            <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-              <button
-                onClick={() => goToPage(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-              >
-                Anterior
-              </button>
+        </div>
+        <div className="mt-4 sm:mt-0 flex justify-center">
+          <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+            <button
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+            >
+              <span className="sr-only">Anterior</span>
+              <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+            </button>
+            <div className="hidden sm:flex">
               {getPageRange().map((page, index) => (
                 page === '...' ? (
                   <span key={`ellipsis-${index}`} className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
@@ -364,15 +355,23 @@ const AdvancedDataTable = ({ tables, currentTableId, onTableSelect }) => {
                   </button>
                 )
               ))}
-              <button
-                onClick={() => goToPage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-              >
-                Próximo
-              </button>
-            </nav>
-          </div>
+            </div>
+            <div className="flex sm:hidden">
+              <span className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                Página {currentPage} de {totalPages}
+              </span>
+            </div>
+            <button
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+            >
+              <span className="sr-only">Próximo</span>
+              <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </nav>
         </div>
       </div>
     </div>

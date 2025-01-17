@@ -2,46 +2,31 @@ import React, { useState } from 'react';
 import AdvancedDataTable from './AdvancedDataTable';
 import TableCreator from './TableCreator';
 
-const generateEmployeesData = () => {
-  const departments = ['TI', 'Marketing', 'Vendas', 'Financeiro', 'RH', 'Operações', 'Jurídico', 'Produto'];
-  const positions = ['Desenvolvedor', 'Designer', 'Gerente', 'Analista', 'Coordenador', 'Assistente', 'Diretor', 'Estagiário'];
-  const names = [
-    'João', 'Maria', 'Pedro', 'Ana', 'Carlos', 'Mariana', 'José', 'Fernanda', 'Paulo', 'Beatriz',
-    'Lucas', 'Camila', 'Rafael', 'Juliana', 'Fernando', 'Larissa', 'Gustavo', 'Amanda', 'Ricardo', 'Patrícia'
-  ];
-  const surnames = [
-    'Silva', 'Santos', 'Oliveira', 'Rodrigues', 'Ferreira', 'Almeida', 'Pereira', 'Lima', 'Gomes', 'Ribeiro',
-    'Martins', 'Carvalho', 'Fernandes', 'Vieira', 'Souza', 'Costa', 'Barbosa', 'Rocha', 'Dias', 'Cardoso'
-  ];
+const generateRandomEmployees = (count) => {
+  const names = ['João', 'Maria', 'Pedro', 'Ana', 'Carlos', 'Mariana', 'José', 'Fernanda', 'Antônio', 'Luísa', 'Francisco', 'Beatriz', 'Paulo', 'Camila', 'Lucas', 'Juliana', 'Rafael', 'Isabela', 'Marcos', 'Larissa'];
+  const surnames = ['Silva', 'Santos', 'Oliveira', 'Souza', 'Rodrigues', 'Ferreira', 'Alves', 'Pereira', 'Lima', 'Gomes', 'Costa', 'Ribeiro', 'Martins', 'Carvalho', 'Almeida', 'Lopes', 'Soares', 'Fernandes', 'Vieira', 'Barbosa'];
+  const positions = ['Desenvolvedor', 'Designer', 'Gerente', 'Analista', 'Coordenador', 'Assistente', 'Diretor', 'Técnico', 'Consultor', 'Estagiário'];
+  const departments = ['TI', 'Marketing', 'Vendas', 'Financeiro', 'RH', 'Operações', 'Jurídico', 'Produto', 'Suporte', 'Administrativo'];
 
-  return Array.from({ length: 50 }, (_, index) => ({
+  return Array.from({ length: count }, (_, index) => ({
     id: index + 1,
     nome: `${names[Math.floor(Math.random() * names.length)]} ${surnames[Math.floor(Math.random() * surnames.length)]}`,
     cargo: positions[Math.floor(Math.random() * positions.length)],
     departamento: departments[Math.floor(Math.random() * departments.length)],
-    salario: Math.floor(Math.random() * (10000 - 2000 + 1) + 2000)
+    salario: Math.floor(Math.random() * (15000 - 2000 + 1) + 2000)
   }));
 };
 
-const generateProductsData = () => {
-  const categories = ['Eletrônicos', 'Móveis', 'Acessórios', 'Vestuário', 'Livros', 'Esportes', 'Beleza', 'Casa e Decoração'];
-  const productNames = [
-    'Laptop', 'Smartphone', 'Cadeira de Escritório', 'Monitor', 'Teclado', 'Mouse', 'Headphone', 'Webcam',
-    'Impressora', 'Roteador', 'Pen Drive', 'HD Externo', 'Carregador Portátil', 'Caixa de Som', 'Smartwatch',
-    'Tablet', 'E-reader', 'Câmera Digital', 'Tripé', 'Mochila para Notebook', 'Suporte para Monitor', 'Mesa',
-    'Poltrona', 'Luminária', 'Ventilador', 'Ar Condicionado Portátil', 'Purificador de Ar', 'Cafeteira',
-    'Garrafa Térmica', 'Organizador de Cabos', 'Suporte para Celular', 'Mousepad', 'Hub USB', 'Adaptador HDMI',
-    'Cabo de Rede', 'Filtro de Linha', 'Estabilizador', 'No-break', 'Projetor', 'Tela de Projeção', 'Quadro Branco',
-    'Flipchart', 'Fragmentadora de Papel', 'Encadernadora', 'Plastificadora', 'Scanner', 'Leitor de Código de Barras',
-    'Telefone IP', 'Fone de Ouvido com Microfone'
-  ];
+const generateRandomProducts = (count) => {
+  const productNames = ['Laptop', 'Smartphone', 'Monitor', 'Teclado', 'Mouse', 'Headset', 'Webcam', 'Impressora', 'Roteador', 'Tablet', 'Smart TV', 'Câmera Digital', 'Caixa de Som', 'Pen Drive', 'HD Externo', 'Carregador Portátil', 'Smartwatch', 'Projetor', 'Microfone', 'Estabilizador'];
+  const categories = ['Eletrônicos', 'Informática', 'Acessórios', 'Áudio e Vídeo', 'Fotografia', 'Rede e Internet', 'Armazenamento', 'Energia', 'Wearables', 'Escritório'];
 
-  return Array.from({ length: 50 }, (_, index) => ({
+  return Array.from({ length: count }, (_, index) => ({
     id: index + 1,
-    nome: productNames[index],
+    nome: productNames[Math.floor(Math.random() * productNames.length)],
     categoria: categories[Math.floor(Math.random() * categories.length)],
     preco: Math.floor(Math.random() * (5000 - 50 + 1) + 50),
-    estoque: Math.floor(Math.random() * (200 - 10 + 1) + 10)
+    estoque: Math.floor(Math.random() * (500 - 10 + 1) + 10)
   }));
 };
 
@@ -50,7 +35,7 @@ const TableManager = () => {
     {
       id: 'employees',
       title: 'Funcionários',
-      data: generateEmployeesData(),
+      data: generateRandomEmployees(50),
       columns: [
         { key: 'nome', label: 'Nome' },
         { key: 'cargo', label: 'Cargo' },
@@ -61,7 +46,7 @@ const TableManager = () => {
     {
       id: 'products',
       title: 'Produtos',
-      data: generateProductsData(),
+      data: generateRandomProducts(50),
       columns: [
         { key: 'nome', label: 'Nome' },
         { key: 'categoria', label: 'Categoria' },
@@ -71,7 +56,7 @@ const TableManager = () => {
     }
   ]);
   const [currentTableId, setCurrentTableId] = useState('employees');
-  const [showTableCreator, setShowTableCreator] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleCreateTable = (title, headers, data) => {
     const newTableId = `table-${Date.now()}`;
@@ -83,7 +68,7 @@ const TableManager = () => {
     };
     setTables(prevTables => [...prevTables, newTable]);
     setCurrentTableId(newTableId);
-    setShowTableCreator(false);
+    setIsDialogOpen(false);
   };
 
   return (
@@ -94,8 +79,8 @@ const TableManager = () => {
             Gerenciador de Tabelas
           </h1>
           <button
-            onClick={() => setShowTableCreator(true)}
-            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            onClick={() => setIsDialogOpen(true)}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             + Nova Tabela
           </button>
@@ -107,18 +92,10 @@ const TableManager = () => {
           onTableSelect={setCurrentTableId}
         />
 
-        {showTableCreator && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" id="my-modal">
-            <div className="relative top-10 mx-auto p-5 border w-3/4 max-w-4xl shadow-lg rounded-md bg-white">
-              <TableCreator onCreateTable={handleCreateTable} />
-              <div className="mt-3 text-center">
-                <button
-                  onClick={() => setShowTableCreator(false)}
-                  className="px-4 py-2 bg-gray-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300"
-                >
-                  Fechar
-                </button>
-              </div>
+        {isDialogOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
+              <TableCreator onCreateTable={handleCreateTable} onClose={() => setIsDialogOpen(false)} />
             </div>
           </div>
         )}

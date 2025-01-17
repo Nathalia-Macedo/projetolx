@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-const TableCreator = ({ onCreateTable }) => {
+const TableCreator = ({ onCreateTable, onClose }) => {
+  const [tableTitle, setTableTitle] = useState('');
   const [headers, setHeaders] = useState(['']);
   const [rows, setRows] = useState([['']]);
-  const [tableTitle, setTableTitle] = useState('');
 
   const addHeader = () => {
     setHeaders([...headers, '']);
@@ -39,6 +39,10 @@ const TableCreator = ({ onCreateTable }) => {
   };
 
   const handleCreateTable = () => {
+    if (!tableTitle || headers.some(header => !header) || rows.some(row => row.some(cell => !cell))) {
+      alert('Por favor, preencha todos os campos antes de criar a tabela.');
+      return;
+    }
     const data = rows.map(row => 
       Object.fromEntries(headers.map((header, index) => [header, row[index]]))
     );
@@ -46,7 +50,7 @@ const TableCreator = ({ onCreateTable }) => {
   };
 
   return (
-    <div className="bg-white shadow rounded-lg p-6">
+    <div className="bg-white p-6 rounded-lg shadow">
       <h2 className="text-lg font-semibold mb-4">Criar Nova Tabela</h2>
       <div className="mb-4">
         <label htmlFor="tableTitle" className="block text-sm font-medium text-gray-700 mb-2">
@@ -57,7 +61,7 @@ const TableCreator = ({ onCreateTable }) => {
           id="tableTitle"
           value={tableTitle}
           onChange={(e) => setTableTitle(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           placeholder="Digite o título da tabela"
         />
       </div>
@@ -72,13 +76,13 @@ const TableCreator = ({ onCreateTable }) => {
                 type="text"
                 value={header}
                 onChange={(e) => updateHeader(index, e.target.value)}
-                className="mr-2 px-2 py-1 border border-gray-300 rounded-md"
+                className="mr-2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Nome do cabeçalho"
               />
               <button
                 type="button"
                 onClick={() => removeHeader(index)}
-                className="px-2 py-1 bg-red-500 text-white rounded-md"
+                className="p-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
               >
                 ✕
               </button>
@@ -87,7 +91,7 @@ const TableCreator = ({ onCreateTable }) => {
           <button 
             type="button" 
             onClick={addHeader}
-            className="px-2 py-1 bg-blue-500 text-white rounded-md"
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             + Adicionar Cabeçalho
           </button>
@@ -120,7 +124,7 @@ const TableCreator = ({ onCreateTable }) => {
                         type="text"
                         value={cell}
                         onChange={(e) => updateCell(rowIndex, colIndex, e.target.value)}
-                        className="w-full px-2 py-1 border border-gray-300 rounded-md"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                         placeholder={`Valor para ${headers[colIndex] || `Coluna ${colIndex + 1}`}`}
                       />
                     </td>
@@ -129,7 +133,7 @@ const TableCreator = ({ onCreateTable }) => {
                     <button
                       type="button"
                       onClick={() => removeRow(rowIndex)}
-                      className="px-2 py-1 bg-red-500 text-white rounded-md"
+                      className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                     >
                       Remover
                     </button>
@@ -142,18 +146,27 @@ const TableCreator = ({ onCreateTable }) => {
         <button 
           type="button" 
           onClick={addRow}
-          className="mt-2 px-2 py-1 bg-green-500 text-white rounded-md"
+          className="mt-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
         >
           + Adicionar Linha
         </button>
       </div>
-      <button 
-        type="button" 
-        onClick={handleCreateTable}
-        className="w-full px-4 py-2 bg-blue-600 text-white rounded-md"
-      >
-        Criar Tabela
-      </button>
+      <div className="flex justify-end space-x-2">
+        <button 
+          type="button" 
+          onClick={onClose}
+          className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+        >
+          Cancelar
+        </button>
+        <button 
+          type="button" 
+          onClick={handleCreateTable}
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          Criar Tabela
+        </button>
+      </div>
     </div>
   );
 };
